@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import BtnCart from '../componets/BtnCart';
+import Category from '../componets/Category';
 
 class Home extends Component {
   render() {
@@ -14,6 +15,7 @@ class Home extends Component {
             id="search"
           />
         </label>
+        <Category />
       </div>
     );
   }
