@@ -5,26 +5,22 @@ import { getProductsFromCategoryAndQuery } from '../services/api';
 import Card from '../componets/Card';
 
 class Home extends Component {
-
-  constructor(props) {
+  constructor() {
     super();
     this.state = {
       products: [],
       value: '',
-    }
+    };
   }
-  // componentDidMount() {
-  //   this.getProduct(categoryId, query);
-  // }
 
   handleChange = ({ target }) => {
     const { value } = target;
-    this.setState({ value: value, })
+    this.setState({ value });
   }
 
   getProduct = async (categoryId = '', query) => {
     getProductsFromCategoryAndQuery(categoryId, query)
-      .then((result) => this.setState({ products: result }));
+      .then((data) => this.setState({ products: data.results }));
   }
 
   render() {
@@ -39,17 +35,20 @@ class Home extends Component {
             type="text"
             name="search"
             id="search"
-            value={value}
-            onChange={this.handleChange}
+            value={ value }
+            onChange={ this.handleChange }
           />
         </label>
         <button
           type="button"
-          onClick={() => this.getProduct('', value)}
+          onClick={ () => this.getProduct('', value) }
           data-testid="query-button"
-        >Buscar</button>
+        >
+          Buscar
+
+        </button>
         <Category />
-        <Card productArray={products} />
+        <Card productArray={ products } />
       </div>
     );
   }
