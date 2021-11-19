@@ -46,7 +46,6 @@ class Category extends React.Component {
                 name="categoria"
                 value={ data.id }
                 onChange={ this.handleChangeCategory }
-                // onClick={ () => getProduct(radioValue, '') }
               />
             </label>
           </li>
