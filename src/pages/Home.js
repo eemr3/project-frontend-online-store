@@ -18,7 +18,7 @@ class Home extends Component {
     this.setState({ value });
   }
 
-  getProduct = async (categoryId = '', query) => {
+  getProduct = async (categoryId = '', query = '') => {
     getProductsFromCategoryAndQuery(categoryId, query)
       .then((data) => this.setState({ products: data.results }));
   }
@@ -47,7 +47,7 @@ class Home extends Component {
           Buscar
 
         </button>
-        <Category />
+        <Category getProduct={ this.getProduct } />
         <Card productArray={ products } />
       </div>
     );
