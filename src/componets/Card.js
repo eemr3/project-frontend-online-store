@@ -8,10 +8,10 @@ class Card extends Component {
       productArray.map((product) => (
         <div key={ product.id } data-testid="product">
           <span>
-            {product.name}
+            {product.title}
             {' '}
           </span>
-          <img src={ product.thumbnail } alt={ product.name } />
+          <img src={ product.thumbnail } alt={ product.title } />
           <span>
             {`R$:${product.price}`}
             {' '}

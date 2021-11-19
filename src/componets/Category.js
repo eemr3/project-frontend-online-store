@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { getCategories } from '../services/api';
 
 class Category extends React.Component {
@@ -6,12 +7,22 @@ class Category extends React.Component {
     super();
     this.state = {
       categoria: [],
+      radioValue: '',
     };
     this.getApi = this.getApi.bind(this);
   }
 
   componentDidMount() {
     this.getApi();
+  }
+
+  handleChangeCategory = ({ target }) => {
+    const valueCategory = target.value;
+    const { getProduct } = this.props;
+    this.setState({ radioValue: valueCategory }, () => {
+      const { radioValue } = this.state;
+      getProduct(radioValue, '');
+    });
   }
 
   getApi() {
@@ -33,6 +44,9 @@ class Category extends React.Component {
                 type="radio"
                 id={ data.name }
                 name="categoria"
+                value={ data.id }
+                onChange={ this.handleChangeCategory }
+                // onClick={ () => getProduct(radioValue, '') }
               />
             </label>
           </li>
@@ -41,5 +55,13 @@ class Category extends React.Component {
     );
   }
 }
+
+Category.propTypes = {
+  getProduct: PropTypes.func,
+};
+
+Category.defaultProps = {
+  getProduct: () => {},
+};
 
 export default Category;
