@@ -7,12 +7,14 @@ class ShoppingCart extends React.Component {
     super(prop);
     this.state = {
       product: [],
+      sum: 0,
     };
     this.getFromLocalStorage = this.getFromLocalStorage.bind(this);
   }
 
   componentDidMount() {
     this.getFromLocalStorage();
+    this.getSoma();
   }
 
   getFromLocalStorage() {
@@ -28,8 +30,16 @@ class ShoppingCart extends React.Component {
     ));
   }
 
+  getSoma = () => {
+    if (localStorage.getItem('soma') === null) return localStorage.setItem('soma', 0);
+    const soma = JSON.parse(localStorage.getItem('soma'));
+    this.setState((prevState) => ({
+      sum: prevState.sum + soma,
+    }));
+  }
+
   render() {
-    const { product } = this.state;
+    const { product, sum } = this.state;
     return (
       <>
         <BtnCart />
@@ -51,6 +61,7 @@ class ShoppingCart extends React.Component {
                 {`R$:${value.price}`}
                 {' '}
               </span>
+              <div data-testid="shopping-cart-product-quantity">{ sum }</div>
             </div>
           ))}
         </div>
