@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { getProductsFromId } from '../services/api';
+import BtnCart from '../components/BtnCart';
 
 class Product extends React.Component {
   constructor(props) {
@@ -17,12 +18,30 @@ class Product extends React.Component {
       image: '',
       price: '',
       details: '',
+      idProduct: '',
+      productList: [],
+      clicks: 1,
     };
   }
 
   componentDidMount() {
     this.getProduct();
   }
+
+   handleClick = () => {
+     const { idProduct } = this.state;
+     this.setState((prevState) => (
+       { productList: [...prevState.productList, idProduct] }), () => {
+       const { productList } = this.state;
+       localStorage.setItem('cartItems', JSON.stringify(productList));
+       this.setState((prevState) => ({
+         clicks: prevState.clicks + 1,
+       }));
+     });
+
+     const { clicks } = this.state;
+     localStorage.setItem('soma', JSON.stringify(clicks));
+   }
 
   getProduct = () => {
     const { id } = this.state;
@@ -32,6 +51,7 @@ class Product extends React.Component {
         image: data.thumbnail,
         price: data.price,
         details: data.details,
+        idProduct: data.id,
       });
     });
   }
@@ -42,15 +62,28 @@ class Product extends React.Component {
       image,
       price,
       details,
+
     } = this.state;
 
     return (
       <div>
-        <span data-testid="product-detail-name">{ title }</span>
-        <img src={ image } alt={ title } />
-        <span>{ price }</span>
-        <p>{ details }</p>
-        <span>teste pagina</span>
+        <div>
+          <span data-testid="product-detail-name">{ title }</span>
+          <img src={ image } alt={ title } />
+          <span>{ price }</span>
+          <p>{ details }</p>
+          <span>teste pagina</span>
+        </div>
+
+        <button
+          data-testid="product-detail-add-to-cart"
+          type="button"
+          onClick={ this.handleClick }
+        >
+          Adicionar ao carrinho
+
+        </button>
+        <BtnCart />
       </div>
     );
   }

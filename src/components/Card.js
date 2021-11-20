@@ -9,10 +9,9 @@ class Card extends Component {
       productList: [],
       clicks: 1,
     };
-    this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange = ({ target }) => {
+  handleClick = ({ target }) => {
     const { value } = target;
     this.setState((prevState) => (
       { productList: [...prevState.productList, value] }), () => {
@@ -47,7 +46,7 @@ class Card extends Component {
           </Link>
           <button
             type="button"
-            onClick={ this.handleChange }
+            onClick={ this.handleClick }
             value={ product.id }
             data-testid="product-add-to-cart"
           >
