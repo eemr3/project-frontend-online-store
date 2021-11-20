@@ -30,7 +30,7 @@ class Card extends Component {
     const { productArray } = this.props;
     return (
       productArray.map((product) => (
-        <div key={ product.id }>
+        <div key={ product.id } data-testid="product">
           <Link
             to={ `/product/${product.id}` }
             data-testid="product-detail-link"

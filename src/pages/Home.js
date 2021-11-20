@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import BtnCart from '../componets/BtnCart';
-import Category from '../componets/Category';
+import BtnCart from '../components/BtnCart';
+import Category from '../components/Category';
 import { getProductsFromCategoryAndQuery } from '../services/api';
-import Card from '../componets/Card';
+import Card from '../components/Card';
 
 class Home extends Component {
   constructor() {
