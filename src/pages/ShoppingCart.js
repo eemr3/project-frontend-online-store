@@ -1,5 +1,5 @@
 import React from 'react';
-import BtnCart from '../componets/BtnCart';
+import BtnCart from '../components/BtnCart';
 import { getProductsFromId } from '../services/api';
 
 class ShoppingCart extends React.Component {
