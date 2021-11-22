@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getCategories } from '../services/api';
+import { getCategories } from '../../services/api';
+
+import './Category.css';
 
 class Category extends React.Component {
   constructor() {
@@ -35,22 +37,24 @@ class Category extends React.Component {
   render() {
     const { categoria } = this.state;
     return (
-      <ul>
-        {categoria.map((data) => (
-          <li key={ data.id }>
-            <label htmlFor={ data.name } data-testid="category">
-              {data.name}
-              <input
-                type="radio"
-                id={ data.name }
-                name="categoria"
-                value={ data.id }
-                onChange={ this.handleChangeCategory }
-              />
-            </label>
-          </li>
-        ))}
-      </ul>
+      <div className="container-category">
+        <ul>
+          {categoria.map((data) => (
+            <li key={ data.id }>
+              <label htmlFor={ data.name } data-testid="category">
+                {data.name}
+                <input
+                  type="radio"
+                  id={ data.name }
+                  name="categoria"
+                  value={ data.id }
+                  onChange={ this.handleChangeCategory }
+                />
+              </label>
+            </li>
+          ))}
+        </ul>
+      </div>
     );
   }
 }

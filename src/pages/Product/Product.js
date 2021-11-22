@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getProductsFromId } from '../services/api';
-import BtnCart from '../components/BtnCart';
+import { getProductsFromId } from '../../services/api';
+import BtnCart from '../../components/BtnCart/BtnCart';
 
 class Product extends React.Component {
   constructor(props) {
@@ -20,7 +20,7 @@ class Product extends React.Component {
       details: '',
       idProduct: '',
       productList: [],
-      clicks: 1,
+      clicks: 0,
     };
   }
 
@@ -29,9 +29,10 @@ class Product extends React.Component {
   }
 
    handleClick = () => {
-     const { idProduct } = this.state;
+     const { id } = this.state;
      this.setState((prevState) => (
-       { productList: [...prevState.productList, idProduct] }), () => {
+       { productList: [...prevState.productList,
+         { idProduct: id, qtd: prevState.clicks + 1 }] }), () => {
        const { productList } = this.state;
        localStorage.setItem('cartItems', JSON.stringify(productList));
        this.setState((prevState) => ({

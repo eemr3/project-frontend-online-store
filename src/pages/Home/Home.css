@@ -1,0 +1,51 @@
+.container-home__header {
+  align-items: center;
+  background-color: royalblue;
+  color: white;
+  display: flex;
+  height: 70px;
+  justify-content: space-around;
+}
+
+.container-home__header label {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.content-header__input-btn input {
+  padding: 7px;
+  margin: 0 10px 0 15px;
+  width: 500px;
+}
+
+.content-header__input-btn button {
+  background-color: whitesmoke;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 7px;
+  transition: all 0.3s ease;
+  width: 100px;
+}
+
+.content-header__input-btn button:hover {
+  background-color: rgba(245, 222, 179, 0.61);
+}
+
+.content-home__btn-cart {
+  color: white;
+  font-size: 40px;
+}
+
+.container-home__content {
+  display: flex;
+  width: 100%;
+}
+
+.container-home__cards {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 20px;
+  width: 80%;
+}

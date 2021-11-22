@@ -1,0 +1,25 @@
+.container-category {
+  background-color: rgb(250, 250, 250);
+  padding: 10px;
+  height: 100vh;
+  width: 17%;
+}
+
+.container-category ul li {
+  background-color: royalblue;
+  color: white;
+  margin: 10px;
+  padding: 10px;
+  list-style-type: none;
+}
+
+.container-category label {
+  cursor: pointer;
+  display: inline-block;
+  padding: 7px;  
+  width: 100%;
+}
+
+.container-category input {
+  visibility: hidden;
+}

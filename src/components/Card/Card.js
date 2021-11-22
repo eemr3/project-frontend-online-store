@@ -2,43 +2,50 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
+import './Card.css';
+// import ProductCart from '../ProdutcCart/ProductCart';
+
 class Card extends Component {
   constructor() {
     super();
     this.state = {
       productList: [],
-      clicks: 1,
+      clicks: 0,
     };
   }
 
   handleClick = ({ target }) => {
     const { value } = target;
+    // const { productArray } = this.props;
+    // const { clicks } = this.state;
+
     this.setState((prevState) => (
-      { productList: [...prevState.productList, value] }), () => {
-      const { productList } = this.state;
+      { productList: [...prevState.productList,
+        { idProduct: value, qtd: prevState.clicks + 1 }],
+      }), () => {
+      const { productList, clicks } = this.state;
       localStorage.setItem('cartItems', JSON.stringify(productList));
+      localStorage.setItem('soma', JSON.stringify(clicks));
       this.setState((prevState) => ({
         clicks: prevState.clicks + 1,
       }));
     });
-    const { clicks } = this.state;
-    localStorage.setItem('soma', JSON.stringify(clicks));
   }
 
   render() {
     const { productArray } = this.props;
     return (
       productArray.map((product) => (
-        <div key={ product.id } data-testid="product">
+        <div key={ product.id } data-testid="product" className="card-product">
           <Link
             to={ `/product/${product.id}` }
             data-testid="product-detail-link"
           >
+            <img src={ product.thumbnail } alt={ product.title } />
             <span>
               {product.title}
               {' '}
             </span>
-            <img src={ product.thumbnail } alt={ product.title } />
             <span>
               {`R$:${product.price}`}
               {' '}
@@ -50,9 +57,10 @@ class Card extends Component {
             value={ product.id }
             data-testid="product-add-to-cart"
           >
-            adicionar ao Carrinho
+            Adicionar ao carrinho
           </button>
         </div>
+
       ))
     );
   }
