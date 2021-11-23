@@ -31,6 +31,8 @@ class ButtonAdd extends Component {
         const product = { id, title, thumbnail, price, quantity };
         this.setProductStorage(product);
       });
+      const { getFromLocalStorageQunatityProduct } = this.props;
+      getFromLocalStorageQunatityProduct();
     }
 
     render() {
@@ -55,6 +57,7 @@ ButtonAdd.propTypes = {
     price: PropTypes.number,
   }),
   dataTestId: PropTypes.string,
+  getFromLocalStorageQunatityProduct: PropTypes.func,
 };
 
 ButtonAdd.defaultProps = {
@@ -65,5 +68,6 @@ ButtonAdd.defaultProps = {
     price: 0,
   },
   dataTestId: '',
+  getFromLocalStorageQunatityProduct: () => {},
 };
 export default ButtonAdd;
