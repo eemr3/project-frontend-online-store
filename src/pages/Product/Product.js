@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { getProductsFromId } from '../../services/api';
 import BtnCart from '../../components/BtnCart/BtnCart';
+import ButtonAdd from '../../components/ButtonAdd/ButtonAdd';
 
 class Product extends React.Component {
   constructor(props) {
@@ -18,9 +19,7 @@ class Product extends React.Component {
       image: '',
       price: '',
       details: '',
-      idProduct: '',
       productList: [],
-      clicks: 0,
     };
   }
 
@@ -28,44 +27,45 @@ class Product extends React.Component {
     this.getProduct();
   }
 
-   handleClick = () => {
-     const { id } = this.state;
-     this.setState((prevState) => (
-       { productList: [...prevState.productList,
-         { idProduct: id, qtd: prevState.clicks + 1 }] }), () => {
-       const { productList } = this.state;
-       localStorage.setItem('cartItems', JSON.stringify(productList));
-       this.setState((prevState) => ({
-         clicks: prevState.clicks + 1,
-       }));
-     });
+  //  handleClick = () => {
+  //    const { id } = this.state;
+  //    this.setState((prevState) => (
+  //      { productList: [...prevState.productList,
+  //        { idProduct: id, qtd: prevState.clicks + 1 }] }), () => {
+  //      const { productList } = this.state;
+  //      localStorage.setItem('cartItems', JSON.stringify(productList));
+  //      this.setState((prevState) => ({
+  //        clicks: prevState.clicks + 1,
+  //      }));
+  //    });
 
-     const { clicks } = this.state;
-     localStorage.setItem('soma', JSON.stringify(clicks));
-   }
+  //    const { clicks } = this.state;
+  //    localStorage.setItem('soma', JSON.stringify(clicks));
+  //  }
 
   getProduct = () => {
     const { id } = this.state;
     getProductsFromId(id).then((data) => {
+      console.log(data);
       this.setState({
         title: data.title,
         image: data.thumbnail,
         price: data.price,
         details: data.details,
-        idProduct: data.id,
       });
     });
   }
 
   render() {
     const {
+      id,
       title,
       image,
       price,
       details,
-
+      productList,
     } = this.state;
-
+    const resultProduct = { id, title, image, price };
     return (
       <div>
         <div>
@@ -75,16 +75,16 @@ class Product extends React.Component {
           <p>{ details }</p>
           <span>teste pagina</span>
         </div>
-
-        <button
+        <ButtonAdd product={ resultProduct } />
+        {/* <button
           data-testid="product-detail-add-to-cart"
           type="button"
           onClick={ this.handleClick }
         >
           Adicionar ao carrinho
 
-        </button>
-        <BtnCart />
+        </button> */}
+        <BtnCart product={ productList } />
       </div>
     );
   }

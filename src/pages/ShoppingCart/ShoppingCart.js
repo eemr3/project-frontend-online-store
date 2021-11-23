@@ -1,49 +1,41 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { getProductsFromId } from '../../services/api';
+import ItemProductCart from '../../components/ItemProductCart/ItemProductCart';
+// import { getProductsFromId } from '../../services/api';
 
 import './ShoppingCart.css';
 
 class ShoppingCart extends React.Component {
-  constructor(prop) {
-    super(prop);
+  constructor() {
+    super();
     this.state = {
-      product: [],
-      sum: 0,
+      products: [],
+      totalPrices: 0,
+      qtd: 0,
+      totalPrice: 0,
     };
-    this.getFromLocalStorage = this.getFromLocalStorage.bind(this);
   }
 
   componentDidMount() {
     this.getFromLocalStorage();
-    // this.getSoma();
   }
 
-  getFromLocalStorage() {
+  getFromLocalStorage = () => {
     if (localStorage.getItem('cartItems') === null) {
       return localStorage.setItem('cartItems', JSON.stringify([]));
     }
     const itemsList = JSON.parse(localStorage.getItem('cartItems'));
-
-    itemsList.filter((item, index, array) => array
-      .indexOf(item) === index).map((value) => (
-      getProductsFromId(value.idProduct)
-        .then((response) => this.setState((prevState) => ({
-          product: [...prevState.product, response], sum: value.qtd,
-        })))
-    ));
+    this.setState(({
+      products: itemsList,
+    }), () => {
+      const { products } = this.state;
+      this.setState({ totalPrices: products
+        .reduce((acc, current) => parseFloat(acc) + parseFloat(current.price), 0) });
+    });
   }
 
-  // getSoma = () => {
-  //   if (localStorage.getItem('soma') === null) return localStorage.setItem('soma', 0);
-  //   const soma = JSON.parse(localStorage.getItem('soma'));
-  //   this.setState(() => ({
-  //     sum: soma,
-  //   }));
-  // }
-
   render() {
-    const { product, sum } = this.state;
+    const { products, totalPrices } = this.state;
     return (
       <div className="container-shopping-cart">
         <div className="shopping-cart__title">
@@ -55,7 +47,7 @@ class ShoppingCart extends React.Component {
             Carrinho de compras
           </h2>
         </div>
-        {product.length === 0 && (
+        {products.length === 0 && (
           <span
             className="empty-cart"
             data-testid="shopping-cart-empty-message"
@@ -63,50 +55,58 @@ class ShoppingCart extends React.Component {
             Seu carrinho está vazio
           </span>)}
         <div>
-          {product.map((value, index) => (
-            <div key={ `${value.id}${index}` } className="container-cart__product">
-              <button type="button">
-                <label htmlFor="btn-close">
-                  {' '}
-                  <i className="fas fa-times" />
-                </label>
-              </button>
-              <img src={ value.thumbnail } alt={ value.title } />
-              <p data-testid="shopping-cart-product-name">
-                {value.title}
-                {' '}
-              </p>
-              <div className="cart__control-quantity">
-                <button
-                  data-testid="product-increase-quantity"
-                  type="button"
-                  onClick={ () => this.setState((prevState) => ({
-                    sum: prevState.sum + 1 })) }
-                >
-                  <label htmlFor="btn">
-                    {' '}
-                    <i className="fas fa-plus" />
-                  </label>
-                </button>
-                <span data-testid="shopping-cart-product-quantity">{ sum }</span>
-                <button
-                  data-testid="product-decrease-quantity"
-                  type="button"
-                  onClick={ () => this.setState((prevState) => (
-                    { sum: prevState.sum - 1 < 0 ? 0 : sum - 1 })) }
-                >
-                  <label htmlFor="btn">
-                    {' '}
-                    <i className="fas fa-minus" />
-                  </label>
-                </button>
-              </div>
-              <span>
-                {`R$:${value.price}`}
-                {' '}
-              </span>
-            </div>
+          {products.map((product, index) => (
+            <ItemProductCart
+              key={ `${product.id}${index}` }
+              product={ product }
+            />
+            // <div key={ `${product.id}${index}` } className="container-cart__product">
+            //   <button type="button">
+            //     <label htmlFor="btn-close">
+            //       {' '}
+            //       <i className="fas fa-times" />
+            //     </label>
+            //   </button>
+            //   <img src={ product.thumbnail } alt={ product.title } />
+            //   <p data-testid="shopping-cart-product-name">
+            //     {product.title}
+            //     {' '}
+            //   </p>
+            //   <div className="cart__control-quantity">
+            //     <button
+            //       data-testid="product-increase-quantity"
+            //       type="button"
+            //       onClick={ () => {} }
+            //     >
+            //       <label htmlFor="btn">
+            //         {' '}
+            //         <i className="fas fa-plus" />
+            //       </label>
+            //     </button>
+            //     <span
+            //       data-testid="shopping-cart-product-quantity"
+            //     >
+            //       { product.quantity }
+
+            //     </span>
+            //     <button
+            //       data-testid="product-decrease-quantity"
+            //       type="button"
+            //       onClick={ () => { } }
+            //     >
+            //       <label htmlFor="btn">
+            //         {' '}
+            //         <i className="fas fa-minus" />
+            //       </label>
+            //     </button>
+            //   </div>
+            //   <span>
+            //     {`R$:${product.price}`}
+            //     {' '}
+            //   </span>
+            // </div>
           ))}
+          <p>{totalPrices}</p>
         </div>
       </div>
     );
