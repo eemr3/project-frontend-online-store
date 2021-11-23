@@ -34,11 +34,12 @@ class ButtonAdd extends Component {
     }
 
     render() {
+      const { dataTestId } = this.props;
       return (
         <button
           type="button"
           onClick={ this.handleClick }
-          data-testid="product-add-to-cart"
+          data-testid={ dataTestId }
         >
           Adicionar ao carrinho
         </button>
@@ -53,6 +54,7 @@ ButtonAdd.propTypes = {
     thumbnail: PropTypes.string,
     price: PropTypes.number,
   }),
+  dataTestId: PropTypes.string,
 };
 
 ButtonAdd.defaultProps = {
@@ -62,5 +64,6 @@ ButtonAdd.defaultProps = {
     thumbnail: '',
     price: 0,
   },
+  dataTestId: '',
 };
 export default ButtonAdd;

@@ -25,7 +25,7 @@ class ProductCart extends Component {
             {' '}
           </span>
         </Link>
-        <ButtonAdd product={ product } />
+        <ButtonAdd product={ product } dataTestId="product-add-to-cart" />
       </div>
     );
   }

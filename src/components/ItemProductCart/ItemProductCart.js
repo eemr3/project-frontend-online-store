@@ -1,8 +1,42 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class ItemProductCart extends Component {
-  render() {
+  constructor() {
+    super();
+
+    this.state = {
+      count: 0,
+      productList: [],
+    };
+  }
+
+  componentDidMount() {
+    this.getProductValues();
+  }
+
+  handleClickIncrement = () => {
+    this.setState((prevState) => ({
+      count: prevState.count + 1,
+    }));
+  }
+
+  handleClickDecrement = () => {
+    this.setState((prevState) => ({
+      count: prevState.count - 1,
+    }));
+  }
+
+  getProductValues = () => {
     const { product } = this.props;
+    this.setState({
+      productList: product,
+      count: product.quantity,
+    });
+  }
+
+  render() {
+    const { productList, count } = this.state;
     return (
       <div className="container-cart__product">
         <button type="button">
@@ -11,16 +45,16 @@ class ItemProductCart extends Component {
             <i className="fas fa-times" />
           </label>
         </button>
-        <img src={ product.thumbnail } alt={ product.title } />
+        <img src={ productList.thumbnail } alt={ productList.title } />
         <p data-testid="shopping-cart-product-name">
-          {product.title}
+          {productList.title}
           {' '}
         </p>
         <div className="cart__control-quantity">
           <button
             data-testid="product-increase-quantity"
             type="button"
-            onClick={ () => {} }
+            onClick={ this.handleClickIncrement }
           >
             <label htmlFor="btn">
               {' '}
@@ -30,13 +64,13 @@ class ItemProductCart extends Component {
           <span
             data-testid="shopping-cart-product-quantity"
           >
-            { product.quantity }
+            { count }
 
           </span>
           <button
             data-testid="product-decrease-quantity"
             type="button"
-            onClick={ () => { } }
+            onClick={ this.handleClickDecrement }
           >
             <label htmlFor="btn">
               {' '}
@@ -45,7 +79,7 @@ class ItemProductCart extends Component {
           </button>
         </div>
         <span>
-          {`R$:${product.price}`}
+          {`R$:${productList.price * count}`}
           {' '}
         </span>
       </div>
@@ -53,4 +87,21 @@ class ItemProductCart extends Component {
   }
 }
 
+ItemProductCart.propTypes = {
+  product: PropTypes.shape({
+    thumbnail: PropTypes.string,
+    title: PropTypes.string,
+    price: PropTypes.number,
+    quantity: PropTypes.number,
+  }),
+};
+
+ItemProductCart.defaultProps = {
+  product: {
+    thumbnail: '',
+    title: '',
+    price: 0,
+    quantity: 0,
+  },
+};
 export default ItemProductCart;
