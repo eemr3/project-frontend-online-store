@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { getProductsFromId } from '../../services/api';
 import BtnCart from '../../components/BtnCart/BtnCart';
+import Evaluation from '../../components/Evaluation';
+import Form from '../../components/Form';
 
 class Product extends React.Component {
   constructor(props) {
@@ -18,10 +20,19 @@ class Product extends React.Component {
       image: '',
       price: '',
       details: '',
-      idProduct: '',
       productList: [],
       clicks: 0,
+      emailCard: '',
+      comentCard: '',
+      formInfo: [],
+      isSaveButtonDisabled: true,
+      selectTYpe: '',
+      comentsSave: [],
     };
+
+    this.onSaveButtonClick = this.onSaveButtonClick.bind(this);
+    this.onInputCHange = this.onInputCHange.bind(this);
+    this.infoInputs = this.infoInputs.bind(this);
   }
 
   componentDidMount() {
@@ -44,6 +55,25 @@ class Product extends React.Component {
      localStorage.setItem('soma', JSON.stringify(clicks));
    }
 
+   onSaveButtonClick(event) {
+     const { formInfo } = this.state;
+     const { infoInputs } = this;
+     event.preventDefault();
+     this.setState((prevState) => ({ formInfo: [...formInfo, infoInputs(prevState)] }));
+     const { comentCard, emailCard, selectTYpe, id, comentsSave } = this.state;
+     const listSave = ({ comentCard, emailCard, selectTYpe, id });
+     this.setState((prevState) => ({
+       comentsSave: [...prevState.comentsSave, listSave] }));
+     localStorage.setItem('evaluationsList', JSON.stringify(comentsSave));
+   }
+
+   onInputCHange({ target }) {
+     const { name, value } = target;
+     this.setState({ [name]: value }, () => {
+       this.setState({ isSaveButtonDisabled: this.validationButton() });
+     });
+   }
+
   getProduct = () => {
     const { id } = this.state;
     getProductsFromId(id).then((data) => {
@@ -52,40 +82,88 @@ class Product extends React.Component {
         image: data.thumbnail,
         price: data.price,
         details: data.details,
-        idProduct: data.id,
       });
     });
   }
 
+  infoInputs(prevState) {
+    this.setState({
+      emailCard: '',
+      comentCard: '',
+      selectTYpe: '',
+    });
+    return {
+      emailCard: prevState.emailCard,
+      comentCard: prevState.comentCard,
+      selectTYpe: prevState.selectTYpe,
+    };
+  }
+
+  validationButton() {
+    const { emailCard } = this.state;
+    if (emailCard === '') {
+      return true;
+    }
+  }
+
   render() {
     const {
-      title,
-      image,
-      price,
-      details,
-
-    } = this.state;
-
+      state: {
+        title,
+        image,
+        price,
+        details,
+        emailCard,
+        comentCard,
+        formInfo,
+        isSaveButtonDisabled,
+        selectTYpe,
+      }, onSaveButtonClick, onInputCHange,
+    } = this;
     return (
-      <div>
+      <section>
         <div>
-          <span data-testid="product-detail-name">{ title }</span>
-          <img src={ image } alt={ title } />
-          <span>{ price }</span>
-          <p>{ details }</p>
-          <span>teste pagina</span>
+          <div>
+            <span data-testid="product-detail-name">{ title }</span>
+            <img src={ image } alt={ title } />
+            <span>{ price }</span>
+            <p>{ details }</p>
+            <span>teste pagina</span>
+          </div>
+
+          <button
+            data-testid="product-detail-add-to-cart"
+            type="button"
+            onClick={ this.handleClick }
+          >
+            Adicionar ao carrinho
+
+          </button>
+          <BtnCart />
         </div>
 
-        <button
-          data-testid="product-detail-add-to-cart"
-          type="button"
-          onClick={ this.handleClick }
-        >
-          Adicionar ao carrinho
-
-        </button>
-        <BtnCart />
-      </div>
+        <div>
+          <Form
+            comentCard={ comentCard }
+            emailInput={ emailCard }
+            onInputCHange={ onInputCHange }
+            onSaveButtonClick={ onSaveButtonClick }
+            isSaveButtonDisabled={ isSaveButtonDisabled }
+            formInfo={ formInfo }
+            selectTYpe={ selectTYpe }
+          />
+        </div>
+        <div>
+          {formInfo.map((form, index) => (
+            <Evaluation
+              comentCard={ form.comentCard }
+              emailInput={ form.emailCard }
+              selectTYpe={ form.selectTYpe }
+              key={ index }
+            />
+          ))}
+        </div>
+      </section>
     );
   }
 }
