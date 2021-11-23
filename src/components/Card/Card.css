@@ -1,10 +1,10 @@
 .card-product {
-  background: #fff;
+  background: white;
   border: 1px solid #e4e4e4;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   height: 430px;
+  justify-content: space-between;
   margin: 5px;
   width: 267px;
 }
@@ -16,9 +16,9 @@
 }
 
 .card-product span {
+  color: royalblue;
   display: inline-block;
   margin: 10px;
-  color: royalblue;
 }
 
 .card-product button {

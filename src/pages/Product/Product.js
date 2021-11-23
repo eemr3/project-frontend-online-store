@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { getProductsFromId } from '../../services/api';
 import BtnCart from '../../components/BtnCart/BtnCart';
-import Evaluation from '../../components/Evaluation';
-import Form from '../../components/Form';
+import ButtonAdd from '../../components/ButtonAdd/ButtonAdd';
+import Form from '../../components/Form/Form';
+import Evaluation from '../../components/Evaluation/Evaluation';
 
 class Product extends React.Component {
   constructor(props) {
@@ -17,11 +18,9 @@ class Product extends React.Component {
     this.state = {
       id,
       title: '',
-      image: '',
+      thumbnail: '',
       price: '',
       details: '',
-      productList: [],
-      clicks: 0,
       emailCard: '',
       comentCard: '',
       formInfo: [],
@@ -39,47 +38,31 @@ class Product extends React.Component {
     this.getProduct();
   }
 
-   handleClick = () => {
-     const { id } = this.state;
-     this.setState((prevState) => (
-       { productList: [...prevState.productList,
-         { idProduct: id, qtd: prevState.clicks + 1 }] }), () => {
-       const { productList } = this.state;
-       localStorage.setItem('cartItems', JSON.stringify(productList));
-       this.setState((prevState) => ({
-         clicks: prevState.clicks + 1,
-       }));
-     });
+  onSaveButtonClick(event) {
+    const { formInfo } = this.state;
+    const { infoInputs } = this;
+    event.preventDefault();
+    this.setState((prevState) => ({ formInfo: [...formInfo, infoInputs(prevState)] }));
+    const { comentCard, emailCard, selectTYpe, id, comentsSave } = this.state;
+    const listSave = ({ comentCard, emailCard, selectTYpe, id });
+    this.setState((prevState) => ({
+      comentsSave: [...prevState.comentsSave, listSave] }));
+    localStorage.setItem('evaluationsList', JSON.stringify(comentsSave));
+  }
 
-     const { clicks } = this.state;
-     localStorage.setItem('soma', JSON.stringify(clicks));
-   }
-
-   onSaveButtonClick(event) {
-     const { formInfo } = this.state;
-     const { infoInputs } = this;
-     event.preventDefault();
-     this.setState((prevState) => ({ formInfo: [...formInfo, infoInputs(prevState)] }));
-     const { comentCard, emailCard, selectTYpe, id, comentsSave } = this.state;
-     const listSave = ({ comentCard, emailCard, selectTYpe, id });
-     this.setState((prevState) => ({
-       comentsSave: [...prevState.comentsSave, listSave] }));
-     localStorage.setItem('evaluationsList', JSON.stringify(comentsSave));
-   }
-
-   onInputCHange({ target }) {
-     const { name, value } = target;
-     this.setState({ [name]: value }, () => {
-       this.setState({ isSaveButtonDisabled: this.validationButton() });
-     });
-   }
+  onInputCHange({ target }) {
+    const { name, value } = target;
+    this.setState({ [name]: value }, () => {
+      this.setState({ isSaveButtonDisabled: this.validationButton() });
+    });
+  }
 
   getProduct = () => {
     const { id } = this.state;
     getProductsFromId(id).then((data) => {
       this.setState({
         title: data.title,
-        image: data.thumbnail,
+        thumbnail: data.thumbnail,
         price: data.price,
         details: data.details,
       });
@@ -109,8 +92,9 @@ class Product extends React.Component {
   render() {
     const {
       state: {
+        id,
         title,
-        image,
+        thumbnail,
         price,
         details,
         emailCard,
@@ -120,26 +104,19 @@ class Product extends React.Component {
         selectTYpe,
       }, onSaveButtonClick, onInputCHange,
     } = this;
+    const resultProduct = { title, thumbnail, price, id };
     return (
       <section>
         <div>
+          <BtnCart />
           <div>
             <span data-testid="product-detail-name">{ title }</span>
-            <img src={ image } alt={ title } />
+            <img src={ thumbnail } alt={ title } />
             <span>{ price }</span>
             <p>{ details }</p>
             <span>teste pagina</span>
           </div>
-
-          <button
-            data-testid="product-detail-add-to-cart"
-            type="button"
-            onClick={ this.handleClick }
-          >
-            Adicionar ao carrinho
-
-          </button>
-          <BtnCart />
+          <ButtonAdd product={ resultProduct } dataTestId="product-detail-add-to-cart" />
         </div>
 
         <div>
