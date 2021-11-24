@@ -8,6 +8,7 @@ class ItemProductCart extends Component {
     this.state = {
       count: 0,
       productList: [],
+      availableQuantity: 0,
     };
   }
 
@@ -16,22 +17,27 @@ class ItemProductCart extends Component {
   }
 
   handleClickIncrement = () => {
-    this.setState((prevState) => ({
-      count: prevState.count + 1,
-    }));
+    const { availableQuantity, count } = this.state;
+    if (count <= availableQuantity) {
+      this.setState((prevState) => ({
+        count: prevState.count + 1,
+      }));
+    }
   }
 
   handleClickDecrement = () => {
     this.setState((prevState) => ({
-      count: prevState.count - 1,
+      count: prevState.count > 0 ? prevState.count - 1 : 0,
     }));
   }
 
   getProductValues = () => {
     const { product } = this.props;
+    console.log(product);
     this.setState({
       productList: product,
       count: product.quantity,
+      availableQuantity: product.availableQuantity,
     });
   }
 
@@ -93,6 +99,7 @@ ItemProductCart.propTypes = {
     title: PropTypes.string,
     price: PropTypes.number,
     quantity: PropTypes.number,
+    availableQuantity: PropTypes.number,
   }),
 };
 
@@ -102,6 +109,7 @@ ItemProductCart.defaultProps = {
     title: '',
     price: 0,
     quantity: 0,
+    availableQuantity: 0,
   },
 };
 export default ItemProductCart;

@@ -2,11 +2,23 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 class ButtonAdd extends Component {
-  constructor() {
-    super();
-    this.state = {
-      quantity: 0,
-    };
+  constructor(props) {
+    super(props);
+
+    const { product: { id } } = props;
+
+    try {
+      const storage = localStorage.getItem('cartItems');
+      const products = JSON.parse(storage);
+      const currentProduct = products.find((product) => product.id === id);
+      this.state = {
+        quantity: currentProduct ? currentProduct.quantity : 0,
+      };
+    } catch (e) {
+      this.state = {
+        quantity: 0,
+      };
+    }
   }
 
   setProductStorage = (product) => {
@@ -14,8 +26,7 @@ class ButtonAdd extends Component {
     const productStorage = responseStorage
       ? JSON.parse(localStorage.getItem('cartItems')) : [];
 
-    // const filteredeStorage = productStorage.filter((item) => item.id !== product.id);
-    const filteredeStorage = productStorage;
+    const filteredeStorage = productStorage.filter((item) => item.id !== product.id);
 
     if (productStorage) {
       const listProdutcts = [...filteredeStorage, product];
@@ -30,11 +41,17 @@ class ButtonAdd extends Component {
         id, title,
         thumbnail,
         price,
+        available_quantity: availableQuantity,
       },
       getFromLocalStorageQunatityProduct } = this.props;
       this.setState((prevState) => ({ quantity: prevState.quantity + 1 }), () => {
         const { quantity } = this.state;
-        const product = { id, title, thumbnail, price, quantity };
+        const product = { id,
+          title,
+          thumbnail,
+          price,
+          quantity,
+          availableQuantity: availableQuantity - 1 };
         this.setProductStorage(product);
         getFromLocalStorageQunatityProduct();
       });
@@ -60,6 +77,7 @@ ButtonAdd.propTypes = {
     title: PropTypes.string,
     thumbnail: PropTypes.string,
     price: PropTypes.number,
+    available_quantity: PropTypes.number,
   }),
   dataTestId: PropTypes.string,
   getFromLocalStorageQunatityProduct: PropTypes.func,
@@ -71,6 +89,7 @@ ButtonAdd.defaultProps = {
     title: '',
     thumbnail: '',
     price: 0,
+    available_quantity: 0,
   },
   dataTestId: '',
   getFromLocalStorageQunatityProduct: () => {},
