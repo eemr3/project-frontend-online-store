@@ -6,6 +6,8 @@ import ButtonAdd from '../../components/ButtonAdd/ButtonAdd';
 import Form from '../../components/Form/Form';
 import Evaluation from '../../components/Evaluation/Evaluation';
 
+import './Product.css';
+
 class Product extends React.Component {
   constructor(props) {
     super(props);
@@ -19,14 +21,14 @@ class Product extends React.Component {
       id,
       title: '',
       thumbnail: '',
-      price: '',
-      details: '',
+      price: 0,
       emailCard: '',
       comentCard: '',
       formInfo: [],
       isSaveButtonDisabled: true,
       selectTYpe: '',
       comentsSave: [],
+      quantity: 0,
     };
 
     this.onSaveButtonClick = this.onSaveButtonClick.bind(this);
@@ -36,6 +38,7 @@ class Product extends React.Component {
 
   componentDidMount() {
     this.getProduct();
+    this.getFromLocalStorageQunatityProduct();
   }
 
   onSaveButtonClick(event) {
@@ -64,8 +67,21 @@ class Product extends React.Component {
         title: data.title,
         thumbnail: data.thumbnail,
         price: data.price,
-        details: data.details,
       });
+    });
+  }
+
+  getFromLocalStorageQunatityProduct = () => {
+    if (localStorage.getItem('cartItems') === null) {
+      return localStorage.setItem('cartItems', JSON.stringify([]));
+    }
+    const itemsList = JSON.parse(localStorage.getItem('cartItems'));
+    this.setState(({
+      products: itemsList,
+    }), () => {
+      const { products } = this.state;
+      this.setState({ quantity: products
+        .reduce((acc, current) => parseFloat(acc) + parseFloat(current.quantity), 0) });
     });
   }
 
@@ -96,30 +112,42 @@ class Product extends React.Component {
         title,
         thumbnail,
         price,
-        details,
         emailCard,
         comentCard,
         formInfo,
         isSaveButtonDisabled,
         selectTYpe,
+        quantity,
       }, onSaveButtonClick, onInputCHange,
     } = this;
     const resultProduct = { title, thumbnail, price, id };
+
     return (
-      <section>
+      <section className="product-container">
         <div>
-          <BtnCart />
-          <div>
-            <span data-testid="product-detail-name">{ title }</span>
+          <BtnCart
+            classNameDiv="container-btnCart-product-screen"
+            quantity={ quantity }
+          />
+          <div className="product-content">
             <img src={ thumbnail } alt={ title } />
-            <span>{ price }</span>
-            <p>{ details }</p>
-            <span>teste pagina</span>
+            <h4 data-testid="product-detail-name">{ title }</h4>
+            <span className="product-content__price">{ price }</span>
+            <span className="product-content__frete">
+              <i className="fas fa-box-open" />
+              Frete Grátis
+            </span>
+            <ButtonAdd
+              product={ resultProduct }
+              dataTestId="product-detail-add-to-cart"
+              getFromLocalStorageQunatityProduct={
+                this.getFromLocalStorageQunatityProduct
+              }
+            />
           </div>
-          <ButtonAdd product={ resultProduct } dataTestId="product-detail-add-to-cart" />
         </div>
 
-        <div>
+        <div className="product-form-container">
           <Form
             comentCard={ comentCard }
             emailInput={ emailCard }

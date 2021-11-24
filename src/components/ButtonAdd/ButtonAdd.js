@@ -14,7 +14,8 @@ class ButtonAdd extends Component {
     const productStorage = responseStorage
       ? JSON.parse(localStorage.getItem('cartItems')) : [];
 
-    const filteredeStorage = productStorage.filter((item) => item.id !== product.id);
+    // const filteredeStorage = productStorage.filter((item) => item.id !== product.id);
+    const filteredeStorage = productStorage;
 
     if (productStorage) {
       const listProdutcts = [...filteredeStorage, product];
@@ -25,11 +26,17 @@ class ButtonAdd extends Component {
   }
 
     handleClick = () => {
-      const { product: { id, title, thumbnail, price } } = this.props;
+      const { product: {
+        id, title,
+        thumbnail,
+        price,
+      },
+      getFromLocalStorageQunatityProduct } = this.props;
       this.setState((prevState) => ({ quantity: prevState.quantity + 1 }), () => {
         const { quantity } = this.state;
         const product = { id, title, thumbnail, price, quantity };
         this.setProductStorage(product);
+        getFromLocalStorageQunatityProduct();
       });
     }
 
@@ -55,6 +62,7 @@ ButtonAdd.propTypes = {
     price: PropTypes.number,
   }),
   dataTestId: PropTypes.string,
+  getFromLocalStorageQunatityProduct: PropTypes.func,
 };
 
 ButtonAdd.defaultProps = {
@@ -65,5 +73,6 @@ ButtonAdd.defaultProps = {
     price: 0,
   },
   dataTestId: '',
+  getFromLocalStorageQunatityProduct: () => {},
 };
 export default ButtonAdd;
