@@ -71,100 +71,106 @@ class Product extends React.Component {
     });
   }
 
-getFromLocalStorageQunatityProduct = () => {
-  if (localStorage.getItem('cartItems') === null) {
-    return localStorage.setItem('cartItems', JSON.stringify([]));
+  getFromLocalStorageQunatityProduct = () => {
+    if (localStorage.getItem('cartItems') === null) {
+      return localStorage.setItem('cartItems', JSON.stringify([]));
+    }
+    const itemsList = JSON.parse(localStorage.getItem('cartItems'));
+    this.setState(({
+      products: itemsList,
+    }), () => {
+      const { products } = this.state;
+      this.setState({ quantity: products
+        .reduce((acc, current) => parseFloat(acc) + parseFloat(current.quantity), 0) });
+    });
   }
-  const itemsList = JSON.parse(localStorage.getItem('cartItems'));
-  this.setState(({
-    products: itemsList,
-  }), () => {
-    const { products } = this.state;
-    this.setState({ quantity: products
-      .reduce((acc, current) => parseFloat(acc) + parseFloat(current.quantity), 0) });
-  });
-}
 
-infoInputs(prevState) {
-  this.setState({
-    emailCard: '',
-    comentCard: '',
-    selectTYpe: '',
-  });
-  return {
-    emailCard: prevState.emailCard,
-    comentCard: prevState.comentCard,
-    selectTYpe: prevState.selectTYpe,
-  };
-}
-
-validationButton() {
-  const { emailCard } = this.state;
-  if (emailCard === '') {
-    return true;
+  infoInputs(prevState) {
+    this.setState({
+      emailCard: '',
+      comentCard: '',
+      selectTYpe: '',
+    });
+    return {
+      emailCard: prevState.emailCard,
+      comentCard: prevState.comentCard,
+      selectTYpe: prevState.selectTYpe,
+    };
   }
-}
 
-render() {
-  const {
-    state: {
-      id,
-      title,
-      thumbnail,
-      price,
-      emailCard,
-      comentCard,
-      formInfo,
-      isSaveButtonDisabled,
-      selectTYpe,
-      quantity,
-    }, onSaveButtonClick, onInputCHange,
-  } = this;
-  const resultProduct = { title, thumbnail, price, id };
-  return (
-    <section className="product-container">
-      <div>
-        <BtnCart classNameDiv="container-btnCart-product-screen" quantity={ quantity } />
-        <div className="product-content">
-          <img src={ thumbnail } alt={ title } />
-          <h4 data-testid="product-detail-name">{ title }</h4>
-          <span className="product-content__price">{ price }</span>
-          <span className="product-content__frete">
-            <i className="fas fa-box-open" />
-            Frete Grátis
-          </span>
-          <ButtonAdd
-            product={ resultProduct }
-            dataTestId="product-detail-add-to-cart"
-            getFromLocalStorageQunatityProduct={ this.getFromLocalStorageQunatityProduct }
+  validationButton() {
+    const { emailCard } = this.state;
+    if (emailCard === '') {
+      return true;
+    }
+  }
+
+  render() {
+    const {
+      state: {
+        id,
+        title,
+        thumbnail,
+        price,
+        emailCard,
+        comentCard,
+        formInfo,
+        isSaveButtonDisabled,
+        selectTYpe,
+        quantity,
+      }, onSaveButtonClick, onInputCHange,
+    } = this;
+    const resultProduct = { title, thumbnail, price, id };
+
+    return (
+      <section className="product-container">
+        <div>
+          <BtnCart
+            classNameDiv="container-btnCart-product-screen"
+            quantity={ quantity }
+          />
+          <div className="product-content">
+            <img src={ thumbnail } alt={ title } />
+            <h4 data-testid="product-detail-name">{ title }</h4>
+            <span className="product-content__price">{ price }</span>
+            <span className="product-content__frete">
+              <i className="fas fa-box-open" />
+              Frete Grátis
+            </span>
+            <ButtonAdd
+              product={ resultProduct }
+              dataTestId="product-detail-add-to-cart"
+              getFromLocalStorageQunatityProduct={
+                this.getFromLocalStorageQunatityProduct
+              }
+            />
+          </div>
+        </div>
+
+        <div className="product-form-container">
+          <Form
+            comentCard={ comentCard }
+            emailInput={ emailCard }
+            onInputCHange={ onInputCHange }
+            onSaveButtonClick={ onSaveButtonClick }
+            isSaveButtonDisabled={ isSaveButtonDisabled }
+            formInfo={ formInfo }
+            selectTYpe={ selectTYpe }
           />
         </div>
-      </div>
-
-      <div className="product-form-container">
-        <Form
-          comentCard={ comentCard }
-          emailInput={ emailCard }
-          onInputCHange={ onInputCHange }
-          onSaveButtonClick={ onSaveButtonClick }
-          isSaveButtonDisabled={ isSaveButtonDisabled }
-          formInfo={ formInfo }
-          selectTYpe={ selectTYpe }
-        />
-      </div>
-      <div>
-        {formInfo.map((form, index) => (
-          <Evaluation
-            comentCard={ form.comentCard }
-            emailInput={ form.emailCard }
-            selectTYpe={ form.selectTYpe }
-            key={ index }
-          />
-        ))}
-      </div>
-    </section>
-  );
-}
+        <div>
+          {formInfo.map((form, index) => (
+            <Evaluation
+              comentCard={ form.comentCard }
+              emailInput={ form.emailCard }
+              selectTYpe={ form.selectTYpe }
+              key={ index }
+            />
+          ))}
+        </div>
+      </section>
+    );
+  }
 }
 
 Product.propTypes = {

@@ -2,18 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 class ProductQuantity extends Component {
-  // constructor() {
-  //   super();
-  //   this.state = {
-  //     products: [],
-  //     quantity: 0,
-  //   };
-  // }
-
-  // componentDidMount() {
-  //   this.getFromLocalStorage();
-  // }
-
   render() {
     const { quantity } = this.props;
     return (
@@ -29,6 +17,7 @@ class ProductQuantity extends Component {
             width: '20px',
             textAlign: 'center',
           } }
+
         >
           {quantity}
         </span>

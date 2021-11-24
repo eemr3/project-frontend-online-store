@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import ItemProductCart from '../../components/ItemProductCart/ItemProductCart';
-// import { getProductsFromId } from '../../services/api';
+
 import './ShoppingCart.css';
 
 class ShoppingCart extends React.Component {
@@ -33,7 +33,6 @@ class ShoppingCart extends React.Component {
 
   render() {
     const { products, totalPrices } = this.state;
-    console.log(products);
     return (
       <div className="container-shopping-cart">
         <div className="shopping-cart__title">
@@ -61,13 +60,8 @@ class ShoppingCart extends React.Component {
           ))}
           <p>{totalPrices}</p>
         </div>
-        <Link to="/Finish">
-          <button
-            type="button"
-            data-testid="checkout-products"
-          >
-            Compra
-          </button>
+        <Link to="/Finish" data-testid="checkout-products">
+          Compra
         </Link>
       </div>
     );

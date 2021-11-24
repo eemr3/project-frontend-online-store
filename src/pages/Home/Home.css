@@ -33,11 +33,6 @@
   background-color: rgba(245, 222, 179, 0.61);
 }
 
-.content-home__btn-cart {
-  color: white;
-  font-size: 40px;
-}
-
 .container-home__content {
   display: flex;
   width: 100%;
@@ -48,4 +43,14 @@
   flex-wrap: wrap;
   padding: 20px;
   width: 80%;
+}
+
+.content-home__btn-cart {
+  align-items: center;
+  background-color: royalblue;
+  color: white;
+  display: flex;
+  font-size: 40px;
+  justify-content: center;
+  width: 170px;
 }

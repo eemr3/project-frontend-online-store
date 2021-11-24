@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import BtnCart from '../../components/BtnCart/BtnCart';
 import Category from '../../components/Category/Category';
 import { getProductsFromCategoryAndQuery } from '../../services/api';
 import Card from '../../components/Card/Card';
+import BtnCart from '../../components/BtnCart/BtnCart';
+import Header from '../../components/Header/Header';
 
 import './Home.css';
 
@@ -12,7 +13,13 @@ class Home extends Component {
     this.state = {
       products: [],
       value: '',
+      quantity: 0,
+      productsCart: [],
     };
+  }
+
+  componentDidMount() {
+    this.getFromLocalStorageQunatityProduct();
   }
 
   handleChange = ({ target }) => {
@@ -25,37 +32,39 @@ class Home extends Component {
       .then((data) => this.setState({ products: data.results }));
   }
 
+  getFromLocalStorageQunatityProduct = () => {
+    if (localStorage.getItem('cartItems') === null) {
+      return localStorage.setItem('cartItems', JSON.stringify([]));
+    }
+    const itemsList = JSON.parse(localStorage.getItem('cartItems'));
+    this.setState(({
+      productsCart: itemsList,
+    }), () => {
+      const { productsCart } = this.state;
+      this.setState({ quantity: productsCart
+        .reduce((acc, current) => parseFloat(acc) + parseFloat(current.quantity), 0) });
+    });
+  }
+
   render() {
-    const { value, products } = this.state;
+    const { value, products, quantity } = this.state;
     return (
       <div>
-        <header className="container-home__header">
-          <div className="content-header__input-btn">
-            <label htmlFor="search" data-testid="home-initial-message">
-              Digite algum termo de pesquisa ou escolha uma categoria.
-              <input
-                data-testid="query-input"
-                type="text"
-                name="search"
-                id="search"
-                value={ value }
-                onChange={ this.handleChange }
-              />
-            </label>
-            <button
-              type="button"
-              onClick={ () => this.getProduct('', value) }
-              data-testid="query-button"
-            >
-              Buscar
-            </button>
-          </div>
-          <BtnCart className="content-home__btn-cart" />
-        </header>
+        <BtnCart quantity={ quantity } className="content-home__btn-cart" />
+        <Header
+          handleChange={ this.handleChange }
+          value={ value }
+          onClick={ () => this.getProduct('', value) }
+        />
         <div className="container-home__content">
           <Category getProduct={ this.getProduct } />
           <div className="container-home__cards">
-            <Card productArray={ products } />
+            <Card
+              productArray={ products }
+              getFromLocalStorageQunatityProduct={
+                this.getFromLocalStorageQunatityProduct
+              }
+            />
           </div>
         </div>
       </div>

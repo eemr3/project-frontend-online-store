@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import ProductQuantity from '../ProductQuantity/ProductQuantity';
 
 class BtnCart extends React.Component {
   render() {
@@ -13,20 +14,9 @@ class BtnCart extends React.Component {
           className={ className }
         >
           <i className="fas fa-shopping-cart" />
-          <span
-            data-testid="shopping-cart-size"
-            style={ {
-              display: 'inline-block',
-              marginLeft: '2px',
-              border: '1px solid black',
-              borderRadius: '50%',
-              height: '20px',
-              width: '20px',
-              textAlign: 'center',
-            } }
-          >
-            {quantity}
-          </span>
+          <ProductQuantity
+            quantity={ quantity }
+          />
         </Link>
       </div>
     );

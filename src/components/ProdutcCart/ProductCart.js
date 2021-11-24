@@ -5,7 +5,7 @@ import ButtonAdd from '../ButtonAdd/ButtonAdd';
 
 class ProductCart extends Component {
   render() {
-    const { product } = this.props;
+    const { product, getFromLocalStorageQunatityProduct } = this.props;
     return (
       <div
         data-testid="product"
@@ -25,7 +25,11 @@ class ProductCart extends Component {
             {' '}
           </span>
         </Link>
-        <ButtonAdd product={ product } dataTestId="product-add-to-cart" />
+        <ButtonAdd
+          product={ product }
+          dataTestId="product-add-to-cart"
+          getFromLocalStorageQunatityProduct={ getFromLocalStorageQunatityProduct }
+        />
       </div>
     );
   }
@@ -38,6 +42,11 @@ ProductCart.propTypes = {
     title: PropTypes.string,
     price: PropTypes.number,
   }).isRequired,
+  getFromLocalStorageQunatityProduct: PropTypes.func,
+};
+
+ProductCart.defaultProps = {
+  getFromLocalStorageQunatityProduct: () => {},
 };
 
 export default ProductCart;
