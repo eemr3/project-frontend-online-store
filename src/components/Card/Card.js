@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// import { Link } from 'react-router-dom';
 
 import './Card.css';
 import ProductCart from '../ProdutcCart/ProductCart';
@@ -16,7 +15,6 @@ class Card extends Component {
           productArray={ productArray }
           getFromLocalStorageQunatityProduct={ getFromLocalStorageQunatityProduct }
         />
-
       ))
     );
   }
