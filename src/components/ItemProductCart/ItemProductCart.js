@@ -33,7 +33,6 @@ class ItemProductCart extends Component {
 
   getProductValues = () => {
     const { product } = this.props;
-    console.log(product);
     this.setState({
       productList: product,
       count: product.quantity,

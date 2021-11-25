@@ -4,7 +4,26 @@ import PropTypes from 'prop-types';
 import ButtonAdd from '../ButtonAdd/ButtonAdd';
 
 class ProductCart extends Component {
+  constructor() {
+    super();
+    this.state = {
+      freeShipping: false,
+    };
+  }
+
+  componentDidMount() {
+    this.freeShippingProduct();
+  }
+
+  freeShippingProduct = () => {
+    const { product: { shipping } } = this.props;
+    this.setState(({
+      freeShipping: shipping.free_shipping,
+    }));
+  }
+
   render() {
+    const { freeShipping } = this.state;
     const { product, getFromLocalStorageQunatityProduct } = this.props;
     return (
       <div
@@ -24,6 +43,16 @@ class ProductCart extends Component {
             {`R$:${product.price}`}
             {' '}
           </span>
+          {freeShipping
+          && (
+            <span
+              style={ { color: 'red', fontSize: '18px' } }
+              data-testid="free-shipping"
+            >
+              Frete Grátis!
+
+            </span>
+          )}
         </Link>
         <ButtonAdd
           product={ product }
@@ -41,6 +70,9 @@ ProductCart.propTypes = {
     thumbnail: PropTypes.string,
     title: PropTypes.string,
     price: PropTypes.number,
+    shipping: PropTypes.shape({
+      free_shipping: PropTypes.bool,
+    }),
   }).isRequired,
   getFromLocalStorageQunatityProduct: PropTypes.func,
 };

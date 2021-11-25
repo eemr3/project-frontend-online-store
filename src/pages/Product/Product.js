@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { getProductsFromId } from '../../services/api';
 import BtnCart from '../../components/BtnCart/BtnCart';
 import ButtonAdd from '../../components/ButtonAdd/ButtonAdd';
@@ -29,6 +30,7 @@ class Product extends React.Component {
       selectTYpe: '',
       comentsSave: [],
       quantity: 0,
+      shipping: false,
     };
 
     this.onSaveButtonClick = this.onSaveButtonClick.bind(this);
@@ -67,6 +69,7 @@ class Product extends React.Component {
         title: data.title,
         thumbnail: data.thumbnail,
         price: data.price,
+        shipping: data.shipping.free_shipping,
       });
     });
   }
@@ -118,6 +121,7 @@ class Product extends React.Component {
         isSaveButtonDisabled,
         selectTYpe,
         quantity,
+        shipping,
       }, onSaveButtonClick, onInputCHange,
     } = this;
     const resultProduct = { title, thumbnail, price, id };
@@ -125,6 +129,9 @@ class Product extends React.Component {
     return (
       <section className="product-container">
         <div>
+          <Link to="/">
+            <i className="fas fa-home" />
+          </Link>
           <BtnCart
             classNameDiv="container-btnCart-product-screen"
             quantity={ quantity }
@@ -133,10 +140,11 @@ class Product extends React.Component {
             <img src={ thumbnail } alt={ title } />
             <h4 data-testid="product-detail-name">{ title }</h4>
             <span className="product-content__price">{ price }</span>
-            <span className="product-content__frete">
-              <i className="fas fa-box-open" />
-              Frete Grátis
-            </span>
+            {shipping && (
+              <span className="product-content__frete">
+                <i className="fas fa-box-open" />
+                Frete Grátis
+              </span>)}
             <ButtonAdd
               product={ resultProduct }
               dataTestId="product-detail-add-to-cart"
