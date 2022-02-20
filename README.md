@@ -1,7 +1,7 @@
 
 # Project Front-End Online Store
 
-Foram 5 dias de projeto em grupo! O objetivo foi sedimentar tudo o nós aprendemos sobre React até o momento, enquanto praticam a organização de um projeto em time com a metodologia agile Kanban.
+Foram 4 dias de projeto em grupo! O objetivo foi sedimentar tudo o nós aprendemos sobre React até o momento, enquanto praticam a organização de um projeto em time com a metodologia agile Kanban.
 Projeto realizado para consolidar o aprendizado do quarto bloco do módulo de front-end no curso da Trybe.
 
 ## Etiquetas
